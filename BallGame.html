@@ -1,0 +1,140 @@
+<!Doctype: HTML w/ Processing>
+
+<html>
+
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Processing Demo</title>
+      <script type="text/javascript" src="js/processing.js"></script>
+  </head>
+  
+  <header>
+     <li><a href="./index.html" title="">Home</a></li>
+     <li><a href="./Portfolio.html" title="">Portfolio</a></li>
+     <li><a href="./about.html"title="">About</a></li>
+     <li><a href="./BallGame.html"title="">Game</a></li>
+  </header>
+  
+  
+  
+  <body>
+    <h1>My First Game</h1>
+    <p>As the ball is moving try clicking the ball and get points. You only have 5 lives.</p>
+    
+    <script type="text/processing">
+    
+int rad = 40;    
+int gameState;
+float x, y;    
+float xSpeed = 5.0; 
+float ySpeed = 5.0;     
+int xdirection = 1;  
+int ydirection = 1;  
+int score=0;         
+int lives=5;         
+boolean lost=false;                  
+int speed=1; 
+ 
+void setup() 
+{
+  size(600, 500);//window size
+  gameState=0;
+}
+ 
+void draw(){
+  background(0);
+ 
+ if (gameState==0){
+   startScreen();
+ }
+ else if (gameState==1){
+ x += xSpeed;
+  if (x>width||x<0){
+    xSpeed *= -1;
+  }
+  y += ySpeed;
+  if (y>height||y<0){
+  ySpeed *= -1;
+  }
+  fill(66, 135, 245); //blue
+  ellipse(x, y, rad, rad); //ball
+  text("score = "+score,10,20);                 
+  text("lives = "+lives,width-80,20);            
+  if (lives<=0)                                 
+  {
+    textSize(44);
+  if(mouseX > 150 && mouseX < 450 && mouseY > 265 && mouseY < 310){
+  fill(19, 252, 3);//green
+}
+    rect(150,300,350,-55,15);
+    fill(230, 18, 18);
+    text("Click to Restart", 155,290);
+    noLoop();                                 
+    lost=true;
+    textSize(15);
+  }
+}
+}
+void mousePressed()                            
+{
+  if (dist(mouseX, mouseY, x, 400)<=90)     
+  {
+    score=score+speed;                          
+    speed=speed+1;                              
+  }
+  else                                           
+  {
+    if (speed<1)                                
+    {
+    speed=speed-1;
+    }
+    lives=lives-1;                               
+  }
+  if (lost==true)                              
+  {
+    speed=1;                                    
+    lives=5;
+    score=0;
+    x=width/2;
+    xdirection=1;
+    lost=false;
+    loop();                                     
+  }
+}
+void startScreen(){
+textSize(44);
+fill(255);//white
+text("Welcome to My First Game!",10,100);
+textSize(22);
+text("Try clicking the ball while it is moving to get points",10,360);
+text("You only have 5 lives",170,380);
+textSize(44);
+fill(0, 237, 250);
+text("Click Ball",200,200);
+if(mouseX > 150 && mouseX < 450 && mouseY > 265 && mouseY < 310){
+  fill(19, 252, 3);//green
+  if(mousePressed){
+    gameState=1;
+  }
+} 
+else{
+  fill(252, 40, 3); //RED
+}
+  
+rect(150,310,300,-55,15);
+fill(252, 186, 3);//Orange Yellow
+text("Click to Play!!",155,300);
+}
+
+
+
+
+
+
+
+    </script>
+    <canvas id="sketch" style="border: 1px solid black;"></canvas>
+    
+  </body>
+  
+</html>
