@@ -22,11 +22,11 @@
     
     <script type="text/processing">
     
-int rad = 40;    
+int rad = 50;    
 int gameState;
 float x, y;    
-float xSpeed = 7.0; 
-float ySpeed = 7.0;     
+float xSpeed = 6.0; 
+float ySpeed = 6.0;     
 int xdirection = 1;  
 int ydirection = 1;  
 int score=0;         
@@ -76,7 +76,7 @@ void draw(){
 }
 void mousePressed()                            
 {
-  if (dist(mouseX, mouseY, x, 400)<=90)     
+  if (dist(mouseX, mouseY, x, 300)<=50)     
   {
     score=score+speed;                          
     speed=speed+1;                              
