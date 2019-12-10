@@ -1,0 +1,189 @@
+<html>
+
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Processing Demo</title>
+      <script type="text/javascript" src="js/processing.js"></script>
+  </head>
+  
+  <header>
+     <li><a href="./index.html" title="">Home</a></li>
+     <li><a href="./Portfolio.html" title="">Portfolio</a></li>
+     <li><a href="./about.html"title="">About</a></li>
+  </header>
+  
+  <body>
+    <h1>Flappy Bird</h1>
+    <p>Survival as far as you can GO!!!!</p>
+    
+  <script type="text/processing">
+    PImage bg, dunsparce, tpipe, bpipe;//bg, player
+    int bgx, bgy, dx, dy, g, Vdy;
+    int[] pipeX, pipeY;//DECLARE TWO ARRAYS
+    int gameState, score, highScore;
+  //once
+  void setup()
+  {
+   size (800,535);
+   bg= loadImage("./img/bg.png");
+   dunsparce = loadImage("./img/dunsparce.png");
+   bpipe = loadImage("./img/bpipe.png");
+   tpipe = loadImage("./img/tpipe.png");
+   dx = 100;
+   dy = 50;
+   g = 1; //Gravity == speed downward acceleration
+   pipeX=new int[5];//[0,0,0,0]
+   pipeY=new int[pipeX.length];
+   //populate
+   for(int i=0; i<pipeX.length;i++)
+   {
+    pipeX[i] = width+200*i;
+    pipeY[i]=(int)random(-350,0);
+   }
+    gameState = -1;
+  }
+ void draw()
+  {
+   if(gameState == -1)
+   {
+    startScreen();
+   }
+  
+   else if(gameState==0)
+  {
+   setBg();
+   setPipes();
+   character();
+   showScore();
+  }
+   else
+  {
+    endScreen();
+    restart();
+  }
+ }
+ 
+ void endScreen()
+ {
+   fill(150, 150, 250, 100);
+   if(mouseX > 90 && mouseX < 595 && mouseY > 150 && mouseY < 290)
+  {
+    fill(66, 233, 245);
+  }
+   rect(90, 150, 505, 140, 5);
+   fill(0);
+   textSize(40);
+   text("Dunsparce DIED!!",200 ,200);
+   text("CLick Here to Try Again",100,270);
+ }
+ 
+ void restart()
+ {
+  if(mouseX > 90 && mouseX < 595 && mouseY > 150 && mouseY < 290)
+  {
+    if(mousePressed)
+    {
+      dy=height/2;
+      for(int i = 0; i < pipeX.length; i++)
+      {
+       pipeX[i] = width + 200*i;
+       pipeY[i] = (int)random(-350,0);
+      }
+       score = 0;
+       gameState = 0;
+     }
+   }
+ }
+ 
+ void showScore()
+ {
+  if(score>highScore)
+  {
+    highScore = score;
+  }
+  fill(160, 160, 160, 200);
+  rect(width-175, 10, 155, 80, 5);
+  fill(0);
+  textSize(32);
+  text("Score:" + score, width - 170, 40);
+  text("High:" + highScore, width - 170, 80);
+ }  
+ void startScreen()
+ {
+  image(bg, 0, 0);
+  textSize(40);
+  fill(0);
+  text("Welcome to Flappy Bird", 40, 100);
+  text("Click the mouse to Start...",40 , 200);
+  if(mousePressed)
+  {
+    dy = height/2;
+    gameState = 0;
+  }
+ } 
+
+ void setPipes()
+ {
+   for(int i=0; i<pipeX.length;i++)
+  {
+  image(tpipe, pipeX[i], pipeY[i]);
+  image(bpipe, pipeX[i], pipeY[i]+ 550);
+  pipeX[i]-=2;
+  if (pipeX[i] < -200)
+  {
+    pipeX[i] = width;
+  }
+  if(dx>(pipeX[i]-40) && dx < pipeX[i] + 106)
+  {
+    if(!(dy > pipeY[i] + 330 && dy < pipeY[i] + (330 + 220 - 60)))
+    { 
+     fill(255, 0, 0, 200);
+     textSize(24);
+     rect(20, height - 223, 455, 32);
+     fill(0);
+     text("UH-OH Dunsparce Hit the Pipe...", 20, height - 200);
+     gameState =1;
+    }
+    else if (dx==pipeX[i])
+    {
+      score++;
+    }
+   }
+  }
+ } 
+
+ 
+
+ void character()
+ {
+ image(dunsparce, dx,dy);
+  dy = dy + Vdy;
+  Vdy = Vdy + g; 
+  if(dy > height || dy < 0)
+  {
+    fill(255, 5, 163);
+    text("OH NO!!! YOU WENT OFF THE SCREEN",20,120);
+    gameState=1;
+  }
+ }  
+ void mousePressed()
+ {
+  Vdy = -15;
+ }
+ 
+ void setBg()
+ {
+  image(bg, bgx, bgy);
+  image(bg, bgx + bg.width, bgy);
+  bgx = bgx - 1;
+  if(bgx<-bg.width)
+  {
+    bgx = 0; //reset it once first image is done
+  }
+ } 
+    </script>
+    <canvas id="sketch" style="border: 1px solid black;"></canvas>
+    
+  </body>
+  
+</html>
